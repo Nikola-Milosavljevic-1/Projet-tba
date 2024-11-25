@@ -46,7 +46,7 @@ class Game:
         # Create exits for rooms
 
         forest.exits = {"N" : cave, "E" : "interdit", "S" : castle, "O" : None}
-        tower.exits = {"N" : cottage, "E" : None, "S" : swamp , "O" : "interdit"}
+        tower.exits = {"N" : cottage, "E" : None, "S" : "unique" , "O" : "interdit"}
         cave.exits = {"N" : None, "E" : cottage, "S" : forest, "O" : None}
         cottage.exits = {"N" : None, "E" : None, "S" : tower, "O" : cave}
         swamp.exits = {"N" : tower, "E" : None, "S" : None, "O" : castle}
@@ -70,7 +70,7 @@ class Game:
     # Process the command entered by the player
     def process_command(self, command_string) -> None:
 
-    
+    #Si le joueur entre aucune commande, renvoyer une commande vide
         if command_string=='':
             return 
         # Split the command string into a list of words

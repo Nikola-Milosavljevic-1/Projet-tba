@@ -5,7 +5,7 @@ class Player():
     def __init__(self, name):
         self.name = name
         self.current_room = None
-        self.previous_room= None
+        
         
     
     # Define the move method.
@@ -18,14 +18,14 @@ class Player():
         if next_room is None:
             print("\nAucune porte dans cette direction !\n")
             return False
-        if next_room == "interdit":
-            print("\n Passage interdit! \n")
+        if next_room == "interdit":  #Passage interdit entre la fôret et la tour en pierre
+            print("\n Ce passage est interdit, choisissez un autre direction ! \n")
             return False
-        if next_room == self.previous_room:
-            print("\n ce jeu est en sens unique \n")
+        if next_room == "unique":   #Passage a sens unique 
+            print("\n ce passage est en sens unique, choisissez un autre chemin \n")
             return False
         # Set the current room to the next room.
-        self.previous_room = self.current_room
+       
         self.current_room = next_room
         print(self.current_room.get_long_description())
         return True
