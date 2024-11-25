@@ -18,12 +18,10 @@ class Player():
         if next_room is None:
             print("\nAucune porte dans cette direction !\n")
             return False
-        if next_room == "interdit":  #Passage interdit entre la fôret et la tour en pierre
-            print("\n Ce passage est interdit, choisissez un autre direction ! \n")
+        if next_room == "Mort":  #Mauvais passage, chute libre
+            print("\n Vous avez pris une mauvaise porte, vous sortez de la pyramide vous êtes mort de chute \n")
             return False
-        if next_room == "unique":   #Passage a sens unique 
-            print("\n ce passage est en sens unique, choisissez un autre chemin \n")
-            return False
+
         # Set the current room to the next room.
        
         self.current_room = next_room
