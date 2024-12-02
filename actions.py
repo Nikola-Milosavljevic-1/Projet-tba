@@ -53,10 +53,26 @@ class Actions:
             print(MSG1.format(command_word=command_word))
             return False
 
+        # Toutes les directions valides
+        directions= {
+            "N": "N", "NORD": "N",
+            "S": "S", "SUD": "S",
+            "E": "E", "EST": "E",
+            "O": "O", "OUEST": "O",
+            "U": "U", "UP": "U",
+            "D": "D", "DOWN": "D",
+            }
         # Get the direction from the list of words.
         direction = list_of_words[1]
-        # Move the player in the direction specified by the parameter.
-        player.move(direction)
+
+        #Convertir la direction en majuscule
+        direction = direction.upper()
+        if direction in directions:
+            direction = directions[direction]
+            # Move the player in the direction specified by the parameter.
+            player.move(direction)
+        else:
+            print(f"Direction '{direction}' non reconnue.")
         return True
 
     def quit(game, list_of_words, number_of_parameters):
@@ -93,7 +109,7 @@ class Actions:
         
         # Set the finished attribute of the game object to True.
         player = game.player
-        msg = f"\nMerci {player.name} d'avoir joué. Au revoir.\n"
+        msg = f"\nMerci gros bg {player.name} d'avoir joué. Au revoir.\n"
         print(msg)
         game.finished = True
         return True
@@ -137,3 +153,18 @@ class Actions:
             print("\t- " + str(command))
         print()
         return True
+   
+   
+    def history(game, list_of_words, number_of_parameters):
+        player = game.player
+        
+        if not player.history_room: # Vérifie si l'ensemble des salles visitées est vide
+            print("\nVous n'avez encore visité aucune pièce.") # Message si aucune pièce n'a été visitée
+            return True  # Terminer l'exécution avec succès
+
+        # Afficher l'historique des pièces visitées
+        print("\nHistorique des pièces visitées :") # Affiche un titre pour la liste des pièces
+        for room in player.history_room: # Parcourt les pièces visitées
+            print(f"- {room.name}") # Affiche le nom de chaque pièce visitée
+        return True
+    
