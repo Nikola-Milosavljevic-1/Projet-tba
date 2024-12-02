@@ -5,8 +5,8 @@ class Player():
     def __init__(self, name):
         self.name = name
         self.current_room = None
-        self.history_room = set()
-        self.previous_rooms = [] 
+        self.history_room = []
+         
         
     # Define the move method.
     def move(self, direction):
@@ -19,7 +19,7 @@ class Player():
             print("\nVous avez déjà visité cette pièce\n")
             print(next_room.get_long_description())
             return False
-        self.history_room.add(self.current_room)
+        self.history_room.append(self.current_room)
 
         if next_room is None:
             print("\nAucune porte dans cette direction !\n")
@@ -49,16 +49,20 @@ class Player():
         return history
 
     def back(self):
-               """
-        Retourne le joueur à la pièce précédente et affiche l'historique.
-        """
-        if not self.previous_rooms:  # Vérifie si la pile est vide
+         if not self.history_room:  # Vérifie si la pile est vide
             print("\nImpossible de revenir en arrière. Vous êtes dans la salle de départ !")
             return False
+        
+         previous_room=self.history_room.pop()
+         self.current_room=previous_room
+         print(f"\nVous êtes retourné à la salle précédente : {self.current_room.name}")
+         print(self.current_room.get_long_description())
+        
+         self.get_history()  # Affiche l'historique mis à jour
+        
+         return 
+         
+        
     
         # Revenir à la pièce précédente
-        self.current_room = self.previous_rooms.pop()
-        print(f"\nVous êtes retourné à la salle précédente : {self.current_room.name}")
-        print(self.current_room.get_long_description())
-        self.get_history()  # Affiche l'historique mis à jour
-        return 
+       
