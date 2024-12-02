@@ -52,13 +52,13 @@ class Player():
                """
         Retourne le joueur à la pièce précédente et affiche l'historique.
         """
-    if not self.previous_rooms:  # Vérifie si la pile est vide
-        print("\nImpossible de revenir en arrière. Vous êtes dans la salle de départ !")
+        if not self.previous_rooms:  # Vérifie si la pile est vide
+            print("\nImpossible de revenir en arrière. Vous êtes dans la salle de départ !")
             return False
-
+    
         # Revenir à la pièce précédente
         self.current_room = self.previous_rooms.pop()
         print(f"\nVous êtes retourné à la salle précédente : {self.current_room.name}")
         print(self.current_room.get_long_description())
         self.get_history()  # Affiche l'historique mis à jour
-        return True
+        return 
