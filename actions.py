@@ -168,3 +168,6 @@ class Actions:
             print(f"- {room.name}") # Affiche le nom de chaque pièce visitée
         return True
     
+    def back(game, list_of_words, number_of_parameters):
+        player = game.player
+        return player.back()

@@ -25,7 +25,8 @@ class Game:
         self.commands["go"] = go
         history = Command("history", ":Afficher toutes les pièces que vous avez fait", Actions.history, 1)
         self.commands["history"] = history
-
+        Back= Command("back", " : retourner à la pièce précédente", Actions.back, 0)
+        self.commands["back"] = Back
         # Créer les salles
     
         Pharaon = Room("Pharaon", "dans une pièce majestueuse ornée d'or et de pierres précieuses, où le trône du Pharaon impose son aura.")
