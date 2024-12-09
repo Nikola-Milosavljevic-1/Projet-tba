@@ -9,6 +9,3 @@ class item :
         pass
    
     #instancier les objets
-
-    Epee1=item("Dague Mortelle","Ajoute 30 de défense et 20 d'attaque",2)
-    Epee2=item("Dague Mortelle","Ajoute 30 de défense et 20 d'attaque",2)
