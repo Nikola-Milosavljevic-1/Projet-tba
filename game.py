@@ -6,7 +6,8 @@ from room import Room
 from player import Player
 from command import Command
 from actions import Actions
-
+from item import Item
+from pnj import pnj
 class Game:
 
     def __init__(self):
@@ -14,6 +15,8 @@ class Game:
         self.rooms = []
         self.commands = {}
         self.player = None
+        self.items = []
+        self.pnj = []
 
     def setup(self):
         # Définir les commandes
@@ -27,8 +30,21 @@ class Game:
         self.commands["history"] = history
         Back= Command("back", " : retourner à la pièce précédente", Actions.back, 0)
         self.commands["back"] = Back
+        look= Command("look", " : Vous regardez autour de vous", Actions.Look, 0)
+        self.commands["look"] = look
+        take= Command("take", " : prendre", Actions.Take, 1)
+        self.commands["take"] = take
+        drop= Command("drop", " : Enlever de votre inventaire", Actions.Drop, 1)
+        self.commands["drop"] = drop
+        check= Command("check", " : Regarder votre inventaire", Actions.Check, 0)
+        self.commands["check"] = check
+        talk = Command("talk", " <Nom du pnj> : parler avec le PNJ", Actions.talk,1)
+        self.commands["talk"] = talk
+        exchange = Command("exchange", " <Nom du pnj> : echanger avec le PNJ", Actions.exchange,1)
+        self.commands["exchange"] = exchange
+        
+
         # Créer les salles
-    
         Pharaon = Room("Pharaon", "dans une pièce majestueuse ornée d'or et de pierres précieuses, où le trône du Pharaon impose son aura.")
         self.rooms.append(Pharaon)
         Scribes = Room("Scribes", "dans une pièce avec des rouleaux de papyrus et des hiéroglyphes couvrent les murs dans une ambiance studieuse et mystérieuse")
@@ -51,9 +67,8 @@ class Game:
         self.rooms.append(Labyrinthe)
         Raakh = Room("Raakh", "dans une salle sombre, où le sol est fissuré par des éclats de lumière rouge sang. Une statue mutilée de Râ gît au sol, remplacée par un trône imposant, où Seth-Raakh vous attend, ses yeux flamboyants de malveillance.")
         self.rooms.append(Raakh)
-
+        # creer les items
         # Create exits for rooms
-
         Pharaon.exits = {"N" : Scribes, "S" : None, "E": None, "O" : None}
         Scribes.exits = {"N" : Tombeau, "O" : None, "S" :Pharaon , "E": None}
         Tombeau.exits = {"S" : Scribes, "O" : Couloir, "N" : None, "E": None}
@@ -66,10 +81,68 @@ class Game:
         Labyrinthe.exits = {"S" : Pyramide, "E" :Raakh, "N" : None, "O": None }
         Raakh.exits = {"S" : None, "E" :None, "N" : None, "O": Labyrinthe }
 
+        epee_lourde= Item("epee_lourde","epee faite en lame de diamant",weight=10, protect=5, damage=30)
+        self.items.append(epee_lourde)
+        Scribes.inventory.add(epee_lourde)
+        Potion_de_soin = Item("Potion_de_soin", "Rend 50 points de vie", weight=1,protect=5, damage=0)  # Pas de dégâts, Poids : 5
+        self.items.append(Potion_de_soin)
+        Hieroglyphes.inventory.add(Potion_de_soin)
+        Bouclier_robuste = Item("Bouclier_robuste", "Bouclier en acier renforcé", weight=5,protect=5, damage=0)  # Pas de dégâts, Poids : 50
+        self.items.append(Bouclier_robuste)
+        Pyramide.inventory.add(Bouclier_robuste)
+        amulette = Item("Amulette d’Isis", "Une amulette ancienne imprégnée de magie.", weight=1,protect=5, damage=0)
+        self.items.append(amulette)
+        Isis.inventory.add(amulette)
+        potion = Item("Potion de Soin", "Une potion qui restaure 50 points de vie.", weight=2,protect=5, damage=0)
+        self.items.append(potion)
+        Couloir.inventory.add(potion)
+        piece_or = Item("Pièce d’Or", "Une pièce ancienne en or massif.", weight=1,protect=5, damage=0)
+        self.items.append(piece_or)
+        Offrandes.inventory.add(piece_or)
+        epee_desert = Item("Épée du Désert", "Une arme légère mais tranchante.", weight=5,protect=5, damage=30)
+        self.items.append(epee_desert)
+        Offrandes.inventory.add(epee_desert)
+        insigne_sacre = Item("Insigne Sacré", "Un symbole de valeur pour les gardiens d’Anubis.", weight=1,protect=5, damage=0)
+        self.items.append(insigne_sacre)
+        Hieroglyphes.inventory.add(insigne_sacre)
+        carte_labyrinthe = Item("Carte du Labyrinthe", "Un guide pour traverser le labyrinthe.", weight=1,protect=5, damage=0)
+        self.items.append(carte_labyrinthe)
+        Tombeau.inventory.add(carte_labyrinthe)
+        indice = Item("Indice", "Un conseil précieux pour résoudre l’énigme à venir.", weight=1,protect=5, damage=0)
+        self.items.append(indice)
+        Horus.inventory.add(indice)
+        pomme = Item("Pomme", "Une pomme bien juteuse.", weight=1,protect=5, damage=0)
+        self.items.append(pomme)
+        Tombeau.inventory.add(pomme)
+        bouclier = Item("Bouclier", "Un bouclier robuste.", weight=5 ,protect=5, damage=0)
+        self.items.append(bouclier)
+        Scribes.inventory.add(Scribes)
 
-        # Configurer les sorties
+        # Création des PNJ
+        pretresse = pnj("Prêtresse", "Une prêtresse mystérieuse gardant des secrets.", Scribes, amulette, pomme)
+        self.pnj.append(pretresse)
+        Scribes.pnj[pretresse.name]=pretresse
+        marchand = pnj("Marchand", "Un marchand proposant des objets utiles.", Isis, bouclier, epee_desert)
+        self.pnj.append(marchand)
+        Isis.pnj[marchand.name]=marchand
+        esclave = pnj("Esclave", "Un ancien esclave reconnaissant pour sa liberté.",Offrandes)
+        self.pnj.append(esclave)
+        Offrandes.pnj[esclave.name]=Offrandes
+        garde = pnj("Garde", "Un garde protecteur des trésors d’Anubis.",Scribes)
+        self.pnj.append(garde)
+        Scribes.pnj[esclave.name]=Scribes
+        scribe = pnj("Scribe", "Un vieil homme qui connaît les secrets des hiéroglyphes.",Pyramide)
+        self.pnj.append(esclave)
+        Pyramide.pnj[esclave.name]=Pyramide
 
-        # Configurer le joueur
+        # Ajouter des dialogues
+        pretresse.add_dialogue("Apportez-moi l’Amulette d’Isis, et je vous bénirai.")
+        marchand.add_dialogue("Je vends des objets rares en échange de pièces d’or.")
+        esclave.add_dialogue("Je vous suis reconnaissant. Prenez ceci, cela vous aidera.")
+        garde.add_dialogue("Seuls les dignes peuvent passer. Montrez-moi l’Insigne Sacré.")
+        scribe.add_dialogue("Les secrets des hiéroglyphes ne sont connus que des sages.")
+
+    
         self.player = Player(input("\nEntrez votre nom : "))
         self.player.current_room = Pharaon
 
@@ -106,6 +179,12 @@ class Game:
     def print_welcome(self):
         print(f"\nBienvenue {self.player.name} dans ce jeu d'aventure !")
         print("Entrez 'help' si vous avez besoin d'aide.")
+        print("Vous êtes un assassin envoyé dans l'une des pyramides sacrées de Gizeh pour accomplir une mission périlleuse. "
+              "Votre cible : Seth-Raakh, un chef de culte maléfique qui menace de plonger le monde dans le chaos."
+                "Les passages sombres et les pièges anciens des pyramides ne sont pas vos seuls ennemis : "
+                "des gardiens, des énigmes, et des mystères ancestraux se dressent sur votre chemin. "
+                "Trouvez des artefacts, déjouez les dangers et achevez votre cible avant que ses plans funestes ne se réalisent."
+                 "Bonne chance, assassin !")
         #
         print(self.player.current_room.get_long_description())
 

@@ -3,10 +3,16 @@
 class Room:
 
     # Define the constructor. 
-    def __init__(self, name, description):
+    def __init__(self, name, description, item=None, mission=None):
         self.name = name
         self.description = description
         self.exits = {}
+        self.inventory=set()
+        self.pnj={}
+        self.item_required = item
+        self.missiom_cleared = mission
+        self.items=[]
+
     
     # Define the get_exit method.
     def get_exit(self, direction):
@@ -25,7 +31,34 @@ class Room:
                 exit_string += exit + ", "
         exit_string = exit_string.strip(", ")
         return exit_string
-
+    
+    def get_inventory(self):
+        if not self.inventory :
+            return "Il n'y a rien ici.\n"
+        else :
+            inventory_string = "On voit :\n"
+            for objet in self.inventory :
+                inventory_string += "\t- " + str(objet) + "\n"
+            inventory_string = inventory_string.strip(",")
+            for personnage in self.pnj.values():
+                inventory_string += "\t- " + str(personnage) + "\n"
+            inventory_string = inventory_string.strip(",")
+            return inventory_string
+            
+        
     # Return a long description of this room including exits.
     def get_long_description(self):
         return f"\nVous êtes {self.description}\n\n{self.get_exit_string()}\n"
+        desc = self.description
+        if self.items :
+            desc += "\nobjet dans cette pièce :"
+            for item in self.items:
+                desc+= f"\n-{item.name} : {item.descprition}"
+        if self.npcs:
+            desc += "\nPersonnages présents :"
+            for npc in self.npcs:
+                desc += f"\n- {npc.name} : {npc.description}"
+        return desc
+        
+    
+    

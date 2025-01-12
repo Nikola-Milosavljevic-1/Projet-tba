@@ -6,6 +6,8 @@ class Player():
         self.name = name
         self.current_room = None
         self.history_room = []
+        self.inventory = dict()
+        self.max_weight = 20
          
         
     # Define the move method.
@@ -35,7 +37,16 @@ class Player():
         print(self.current_room.get_long_description())
         return True
     
+    def get_inventory(self):
+        if not self.get_inventory:
+            print("\n Votre inventaire est vide.")
+            return False
+        
+        print("votre inventaire :")
+        for item in self.inventory.values():  # Parcourt les éléments de l'inventaire
+            print(f"- {item.name}: {item.damae} {item.protect} {item.description} ")  
     
+
     def get_history(self):
         
         if not self.history_room:   # Ici on verifie si la pile est vide
@@ -48,6 +59,7 @@ class Player():
             print(f"- {room_name}") # Affiche chaque nom de pièce avec un tiret devant
         return history
 
+    
     def back(self):
          if not self.history_room:  # Vérifie si la pile est vide
             print("\nImpossible de revenir en arrière. Vous êtes dans la salle de départ !")
