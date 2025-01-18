@@ -6,35 +6,39 @@ class Player():
         self.name = name
         self.current_room = None
         self.history_room = []
-        self.inventory = dict()
+        self.history = []
+        self.inventory = {}
         self.max_weight = 20
+        self.move_count=0
          
         
     # Define the move method.
     def move(self, direction):
         # Get the next room from the exits dictionary of the current room.
         next_room = self.current_room.exits[direction]
-        self.get_history()
-        next_room = self.current_room.exits.get(direction)
-        # If the next room is None, print an error message and return False.
-        if next_room in self.history_room:
-            print("\nVous avez déjà visité cette pièce\n")
-            print(next_room.get_long_description())
-            return False
-        self.history_room.append(self.current_room)
 
+        # If the next room is None, print an error message and return False.
         if next_room is None:
             print("\nAucune porte dans cette direction !\n")
             return False
         
-        if next_room == "mort":  #si dans la prochaine pièce est "mort", alors afficher qu'il est mort et qu'il a perdu
-            print("\nC'ètait un piège, une porte qui menait dans le vide! Vous êtes de mort de chute\n")
+        if not self.current_room or direction not in self.current_room.exits:
+                print("\nAucune porte dans cette direction !\n")
+                return False
+
+        if next_room == "unique":
+            print("\nPassage a sens unique !\n")
             return False
-  
+        objet_recquis = next_room.item_required
+        if objet_recquis and objet_recquis not in player.inventory.values() :
+            print("\nVous avez besoin d'un passe pour acceder aux trains.\n")
+            return False
         # Set the current room to the next room.
+        self.history.append(self.current_room)
         self.current_room = next_room
-    
-        print(self.current_room.get_long_description())
+        self.move_count += 1
+        print(f"{self.current_room.get_long_description()}\n{self.get_history()}")
+        print(f"Vous vous etes deplace {self.move_count} fois.\n")
         return True
     
     def get_inventory(self):

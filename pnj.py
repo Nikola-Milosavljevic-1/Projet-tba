@@ -42,17 +42,22 @@ class pnj :
       sorties = self.current_room.exits
       if not sorties :
             return False
+      deplacement = random.choice(["bouge","bouge"])
+      sorties = self.current_room.exits
+      if not sorties :
+         return False
       if deplacement == "bouge":
-            direction = random.choice(list(sorties.keys()))
-            next_room = self.current_room.exits[direction]
-            if not next_room :
-               return False
-            if self.name in self.current_room.characters:
-               del self.current_room.characters[self.name]
-            self.current_room = next_room
-            next_room.characters[self.name]=self
-            print(f"{self.name} se trouve maintenant dans {self.current_room.name}\n")
-            return True
+         direction = random.choice(list(sorties.keys()))
+         next_room = self.current_room.exits[direction]
+         if type(next_room) == str :
+            print(f"{self.name} se trouve encore dans {self.current_room.name}\n")
+            return False
+         if self.name in self.current_room.pnj:
+            del self.current_room.pnj[self.name]
+         self.current_room = next_room
+         next_room.pnj[self.name]=self
+         print(f"{self.name} se trouve maintenant dans {self.current_room.name}\n")
+         return True
       print(f"{self.name} se trouve encore dans {self.current_room.name}\n")
       return False
 
@@ -70,29 +75,6 @@ class pnj :
         Returns :
             str : Le message que le personnage dit.
       """
-      if not self.msgs:  # Vérifie si la liste des messages est vide
-         return f"{self.name} ne veut pas vous parler."
-
-      if self.name.lower() == "marchand":  # Cas spécifique pour le marchand
-         if self.item_gift:  # Si le marchand a quelque chose à donner
-            if self.item_required and self.item_required.name not in player.inventory:
-               return ("J'ai quelque chose... Je te donnerais un objet "
-                    "si tu me donnes quelque chose...")
-            return "Je le sens, t'as quelque chose pour moi ! On échange ?"
-
-      # Vérifie que self.msgs contient au moins un message avant d'utiliser append et pop
-      if self.msgs:
-         message = self.msgs.pop(0)  # Récupère le premier message
-         self.msgs.append(message)  # Remet le message à la fin de la liste
-         return message
-
-   def add_dialogue(self, dialogue):
-      self.msgs.append(dialogue)
-      
-   def interact(self):
-      if not self.dialogue:
-         print(f" {self.name} n'a rien a dire pour l'instant.")
-      else: 
-         print(f"\n{self.name} vous dit ") 
-         for dialogue in self.add_dialogue:
-            print(f"{dialogue}")                                                                                                            
+      msg = self.msgs.pop(0)
+      self.msgs.append(msg)
+      return msg

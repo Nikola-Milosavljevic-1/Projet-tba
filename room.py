@@ -44,21 +44,10 @@ class Room:
                 inventory_string += "\t- " + str(personnage) + "\n"
             inventory_string = inventory_string.strip(",")
             return inventory_string
-            
-        
+   
     # Return a long description of this room including exits.
     def get_long_description(self):
         return f"\nVous êtes {self.description}\n\n{self.get_exit_string()}\n"
-        desc = self.description
-        if self.items :
-            desc += "\nobjet dans cette pièce :"
-            for item in self.items:
-                desc+= f"\n-{item.name} : {item.descprition}"
-        if self.npcs:
-            desc += "\nPersonnages présents :"
-            for npc in self.npcs:
-                desc += f"\n- {npc.name} : {npc.description}"
-        return desc
         
     
     
