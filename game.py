@@ -176,17 +176,17 @@ class Game:
         print(self.player.current_room.get_long_description())
 
     def endgame(self):
-        if self.player.current_room.name == "raakh":
+        raakh_room = next((room for room in self.rooms if room.name.lower() == "raakh"), None)
+        if self.player.current_room.name == raakh_room.name: 
             print("Vous êtes arrivé dans la salle de raakh ! Vous avez pu franchir toute la pyramide\n")
-            self.finished = True
             return True
         if self.player.current_room.name == "mort":
             print("Vous avez perdu")
             return True
         if self.player.move_count > 10 :
-            self.finished = True
             print("Vous avez pris trop de temps... Raakh est revenu\n")
             return True
+        return False
 
 
     def play(self):
@@ -197,6 +197,8 @@ class Game:
             # Obtenez la commande du joueur
             command = input("> ")
             self.process_command(command)
+            if self.endgame():
+                self.finished=True
 
 def main():
     # Create a game object and play the game

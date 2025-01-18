@@ -75,6 +75,39 @@ class pnj :
         Returns :
             str : Le message que le personnage dit.
       """
-      msg = self.msgs.pop(0)
-      self.msgs.append(msg)
-      return msg
+      if not self.msgs:  # Vérifie si la liste des messages est vide
+         return f"{self.name} ne veut pas vous parler."
+
+      if self.name.lower() == "marchand":  # Cas spécifique pour le marchand
+         if self.item_gift:  # Si le marchand a quelque chose à donner
+            if self.item_required and self.item_required.name not in player.inventory:
+               return ("J'ai quelque chose... Je te donnerais un objet "
+                    "si tu me donnes quelque chose...")
+            return "Je le sens, t'as quelque chose pour moi ! On échange ?"
+         
+         if self.msgs is None :
+            return "Ne veut pas vous parler."
+      if self.name == "prêtresse" :
+         if self.item_gift:
+            if self.item_required.name not in player.inventory :
+               return ("Donne moi cette amulette, et je donnerai des informations "
+                        "que j'ai trouve si tu me donnes de quoi manger.")
+            return "Tout grand assasin est un bon marchand"
+         self.msgs.append(self.msgs[0])
+         return self.msgs.pop(0)
+      if self.name == "esclave" :
+         if self.item_gift:
+               if self.item_required.name in player.inventory :
+                  return "Achète ma liberéré"
+         self.msgs.append(self.msgs[0])
+         return self.msgs.pop(0)
+      if self.name == "garde" :
+         if self.item_gift:
+            if self.item_required.name not in player.inventory :
+               return ("Qui es tu... ? "
+                            "Passe moi une pièce d'or et je te laisse passer")
+            return "Tu n'es pas du coin.."
+         self.msgs.append(self.msgs[0])
+         return self.msgs.pop(0)
+      self.msgs.append(self.msgs[0])
+      return self.msgs.pop(0)
