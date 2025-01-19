@@ -1,9 +1,10 @@
 # TBA
-
-Ce repo contient la première version (minimale) du jeu d’aventure TBA.
-
-Les lieux sont au nombre de 6. Il n'y a pas encore d’objets ni de personnages autres que le joueur et très peu d’interactions. Cette première version sert de base à ce qui va suivre, et sera améliorée au fur et à mesure.
-
+Petit jeu d'aventure Assasins Boss
+Vous êtes un assassin envoyé dans l'une des pyramides sacrées de Gizeh pour accomplir une mission périlleuse. 
+Votre cible : Seth-Raakh, un chef de culte maléfique qui menace de plonger le monde dans le chaos.
+Les passages sombres et les pièges anciens des pyramides ne sont pas vos seuls ennemis : "
+Rejoignez la salle Raakh avant qu'il n'arrive, vous avez environ le temps de 20 déplacements avant qu'il arrive"
+Bonne chance, assassin !"
 
 ## Structuration
 
