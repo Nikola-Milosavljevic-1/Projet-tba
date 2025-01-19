@@ -2,9 +2,9 @@
 Petit jeu d'aventure Assasins Boss.
 Vous êtes un assassin envoyé dans l'une des pyramides sacrées de Gizeh pour accomplir une mission périlleuse. 
 Votre cible : Seth-Raakh, un chef de culte maléfique qui menace de plonger le monde dans le chaos.
-Les passages sombres et les pièges anciens des pyramides ne sont pas vos seuls ennemis : "
-Rejoignez la salle Raakh avant qu'il n'arrive, vous avez environ le temps de 20 déplacements avant qu'il arrive"
-Bonne chance, assassin !"
+Les passages sombres et les pièges anciens des pyramides ne sont pas vos seuls ennemis.
+Rejoignez la salle Raakh avant qu'il n'arrive, vous avez environ le temps de 20 déplacements avant qu'il arrive.
+Bonne chance, assassin !
 
 ## Structuration
 
