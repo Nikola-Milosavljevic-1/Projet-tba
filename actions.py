@@ -71,7 +71,10 @@ class Actions:
         if direction in directions:
             direction = directions[direction]
     # Appeler la méthode move du joueur
-            if player.move(direction):
+            if player.move(direction, player):
+                for npc in game.pnj:
+                    if npc.name == "Garde":
+                        npc.move()
                 print(f"Vous avez avancé vers : {player.current_room.name}")
             else:
                 print("Déplacement impossible.")
@@ -222,10 +225,11 @@ class Actions:
         else :
             print(f"\nL'objet '{name_item}' n'est pas dans cet endroit.\n")
         return True
+    
     @staticmethod
     def Drop(game, list_of_words, number_of_parameters):
         l = len(list_of_words)
-        # If the number of parameters is incorrect, print an error message and return False.
+        # Vérifie si le nombre de paramètres est correct
         if l != number_of_parameters + 1:
             command_word = list_of_words[0]
             print(MSG1.format(command_word=command_word))
@@ -234,12 +238,22 @@ class Actions:
         player = game.player
         name_item = list_of_words[1].capitalize()
 
-        if name_item in player.inventory : #on vérifie si le nom de l'item est présent dans l'inventaire du jo
-            item = player.inventory.pop(name_item) #on retire l'obejt de l'inventaire du personnage
-            player.current_room.add(item)#on a joute l'item dans la pièce ac
+    # Vérifie si l'objet est dans l'inventaire du joueur
+        if name_item in player.inventory:
+            item = player.inventory.pop(name_item)  # Retire l'objet de l'inventaire du joueur
+
+        # Ajoute l'objet à l'inventaire de la pièce
+            if isinstance(player.current_room.inventory, set):  # Si inventory est un set
+                player.current_room.inventory.add(item)
+            elif isinstance(player.current_room.inventory, list):  # Si inventory est une list
+                player.current_room.inventory.append(item)
+            else:
+                print("Erreur : type de collection non supporté pour l'inventaire de la pièce.")
+                return False
+
             print(f"\nVous avez déposé l'objet : '{item.name}'.\n")
-        else :
-            print(f"\nVous ne possedez pas cet objet : '{name_item}'.\n")
+        else:
+            print(f"\nVous ne possédez pas cet objet : '{name_item}'.\n")
         return True
     @staticmethod
     def history(game, list_of_words, number_of_parameters):
@@ -285,7 +299,7 @@ class Actions:
         nom_npc = list_of_words[1].capitalize()
         for npc in pnj:
             if nom_npc == npc.name :
-                print(f"\n- {npc.name} : {npc.get_msg(player)}\n")
+                npc.get_msg(player)
             else :
                 print(f"\nIl n'y a personne avec le nom : {nom_npc} dans cet endroit.\n")
             return True
@@ -304,35 +318,52 @@ class Actions:
         Returns:
             bool: True si la commande est exécutée avec succès, False sinon.
         """
+    @staticmethod
+    def exchange(game, list_of_words, number_of_parameters):
+        """
+        Permet d'échanger des objets avec un PNJ.
+
+        Args:
+            game (Game): L'objet représentant le jeu.
+            list_of_words (list): Liste des mots constituant la commande.
+            number_of_parameters (int): Nombre de paramètres attendus pour la commande.
+
+        Returns:
+            bool: True si la commande est exécutée avec succès, False sinon.
+        """
         l = len(list_of_words)
         # If the number of parameters is incorrect, print an error message and return False.
         if l != number_of_parameters + 1:
             command_word = list_of_words[0]
             print(MSG1.format(command_word=command_word))
             return False
+
         nom_npc = list_of_words[1].capitalize()
-        pnj = game.player.current_room.characters.values()
+        nom_item = list_of_words[2].capitalize()
+        pnj = game.player.current_room.pnj.values()
         player = game.player
         for npc in pnj:
             if nom_npc == npc.name:
-                if npc.item_gift :
-                    if npc.item_required.name in player.inventory:
-                        print(f"\n- {npc.name} : '{npc.item_required.name}' !"
-                              " Je vous remercie. Voici un objet en échange.\n")
-                        # Donner un objet au joueur
-                        player.inventory[npc.item_gift.name] = npc.item_gift
-                        # Retirer l'objet donné
-                        player.inventory.pop(pnj.item_required.name)
-                        print(f"Vous avez recu l'objet: '{npc.item_gift.name}'\n")
-                        npc.item_gift = None
+                if npc.item_gift:
+                    if nom_item in player.inventory:
+                        if npc.item_required and npc.item_required.name == nom_item:
+                            print(f"\n- {npc.name} : '{nom_item}' !"
+                                  " Je vous remercie. Voici un objet en échange.\n")
+                            # Donner un objet au joueur
+                            player.inventory[npc.item_gift.name] = npc.item_gift
+                            # Retirer l'objet donné
+                            player.inventory.pop(nom_item)
+                            print(f"Vous avez reçu l'objet: '{npc.item_gift.name}'\n")
+                            npc.item_gift = None
+                            return True
+                        else:
+                            print(f"\n{npc.name} n'a pas besoin de cet objet.\n")
+                            return False
                     else:
-                        print(f"\n- {npc.name} : Tu n'as pas ce que je veux ...\n")
-                    return True
-                print("\nJe n'ai rien a echanger.\n")
-                return True
-            print("\nVous ne pouvez pas echanger.\n")
-            return True
+                        print(f"\nVous n'avez pas l'objet '{nom_item}' dans votre inventaire.\n")
+                        return False
+        print(f"\nIl n'y a personne avec le nom : {nom_npc} dans cet endroit.\n")
         return False
-   
+
     # Vérifier que la commande contient le nom d'un PNJ
     

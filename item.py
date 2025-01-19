@@ -1,13 +1,13 @@
 class Item :
     def __init__(self, name, description, damage, protect,weight):
         self.name=name
-        self.strength=damage
+        self.damage=damage
         self.protect=protect
         self.description = description
         self.weight = weight
        
     def __str__(self):
-        return f"Il y a {self.name} : , {self.description}, avec {self.protect} et {self.strength}, {self.weight}"
+        return f"Il y a {self.name} : {self.description}, avec {self.protect} de protection, {self.damage} de puissance, et {self.weight} de poids"
         pass
     def __repr__(self):
         """
