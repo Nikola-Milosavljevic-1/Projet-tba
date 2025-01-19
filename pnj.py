@@ -110,16 +110,14 @@ class pnj:
             msg = self.msgs[self.msg_index]
             self.msg_index = (self.msg_index + 1) % len(self.msgs)
             return msg
-
+        
         if self.name.lower() == "garde":
-            if self.item_gift:
-                print(self.item_required.name)
-                if self.item_required.name not in player.inventory:
-                    for msg in self.msgs_require_item:
-                        print(f"\n- {self.name} : {msg}\n")
-                else:
-                    for msg in self.msgs:
-                        print(f"\n- {self.name} : {msg}\n")
+            if self.item_required and self.item_required.name not in player.inventory:
+                for msg in self.msgs_require_item:
+                    print(f"\n- {self.name} : {msg}\n")
+            else:
+                for msg in self.msgs:
+                    print(f"\n- {self.name} : {msg}\n")
             msg = self.msgs[self.msg_index]
             self.msg_index = (self.msg_index + 1) % len(self.msgs)
             return msg
