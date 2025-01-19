@@ -1,5 +1,5 @@
 # TBA
-Petit jeu d'aventure Assasins Boss
+Petit jeu d'aventure Assasins Boss.
 Vous êtes un assassin envoyé dans l'une des pyramides sacrées de Gizeh pour accomplir une mission périlleuse. 
 Votre cible : Seth-Raakh, un chef de culte maléfique qui menace de plonger le monde dans le chaos.
 Les passages sombres et les pièges anciens des pyramides ne sont pas vos seuls ennemis : "
